@@ -1,6 +1,7 @@
-package com.atguigu.app;
+package com.atguigu.app.dwd;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.atguigu.utils.MyKafkaUtil;

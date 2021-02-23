@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 public class MyKafkaUtil {
 
-    private static String KAFKA_PORT = "hadoop102:9092,hadoop103:9092,hadoop104:9092";
+    private static final String KAFKA_PORT = "hadoop102:9092,hadoop103:9092,hadoop104:9092";
 
     private static Properties properties = new Properties();
 
