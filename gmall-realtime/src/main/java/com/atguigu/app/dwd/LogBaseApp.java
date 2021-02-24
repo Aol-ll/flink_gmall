@@ -92,17 +92,19 @@ public class LogBaseApp {
         @Override
         public void processElement(JSONObject jsonObject, Context context, Collector<String> collector) throws Exception {
             String startJSON = jsonObject.getString("start");
-            JSONArray displaysJSON = jsonObject.getJSONArray("displays");
             if (startJSON != null && startJSON.length() > 0){
                 context.output(new OutputTag<String>("start") {},jsonObject.toString());
-            } else if (displaysJSON != null && displaysJSON.size() > 0) {
-                for (int i = 0; i < displaysJSON.size(); i++) {
-                    JSONObject display = displaysJSON.getJSONObject(i);
-                    display.put("page", jsonObject.getJSONObject("page").getString("page_id"));
-                    context.output(new OutputTag<String>("display") {},display.toString());
-                }
             } else {
+                JSONArray displaysJSON = jsonObject.getJSONArray("displays");
                 collector.collect(jsonObject.toString());
+
+                if (displaysJSON != null && displaysJSON.size() > 0) {
+                    for (int i = 0; i < displaysJSON.size(); i++) {
+                        JSONObject display = displaysJSON.getJSONObject(i);
+                        display.put("page", jsonObject.getJSONObject("page").getString("page_id"));
+                        context.output(new OutputTag<String>("display") {},display.toString());
+                    }
+                }
             }
         }
     }

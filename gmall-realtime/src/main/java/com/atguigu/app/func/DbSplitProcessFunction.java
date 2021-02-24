@@ -40,7 +40,6 @@ public class DbSplitProcessFunction extends ProcessFunction<JSONObject, JSONObje
         //获取连接
         Class.forName(GmallConfig.PHOENIX_DRIVER);
         connection = DriverManager.getConnection(GmallConfig.PHOENIX_SERVER);
-
         //初次执行
         refreshMeta();
         //开启周期调度
@@ -66,7 +65,7 @@ public class DbSplitProcessFunction extends ProcessFunction<JSONObject, JSONObje
             //放入map中等待读取配置信息
             tableProcessMap.put(key, tableProcess);
             //输出类型为hbase才建表,放入set判断其是否存在
-            if (TableProcess.SINK_TYPE_HBASE.equals(tableProcess.getSinkType())){
+            if ("insert".equals(operateType) && TableProcess.SINK_TYPE_HBASE.equals(tableProcess.getSinkType())){
                 boolean notExist = existsTable.add(tableProcess.getSinkTable());
                 if (notExist) {
                     checkTable(
