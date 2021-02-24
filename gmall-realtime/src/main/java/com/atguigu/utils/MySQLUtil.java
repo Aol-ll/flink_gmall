@@ -2,6 +2,7 @@ package com.atguigu.utils;
 
 
 
+import com.atguigu.bean.TableProcess;
 import com.google.common.base.CaseFormat;
 import org.apache.commons.beanutils.BeanUtils;
 
