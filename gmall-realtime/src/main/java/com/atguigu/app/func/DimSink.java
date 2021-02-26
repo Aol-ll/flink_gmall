@@ -3,9 +3,12 @@ package com.atguigu.app.func;
 
 import com.alibaba.fastjson.JSONObject;
 import com.atguigu.common.GmallConfig;
+import com.atguigu.utils.DimUtil;
+import com.atguigu.utils.RedisUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import redis.clients.jedis.Jedis;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,15 +37,21 @@ public class DimSink extends RichSinkFunction<JSONObject> {
 
         try {
             //获取表信息
+            JSONObject data = value.getJSONObject("data");
             String table = value.getString("sink_table");
-            Set<String> keySet = value.getJSONObject("data").keySet();
-            Collection<Object> values = value.getJSONObject("data").values();
+            Set<String> keySet = data.keySet();
+            Collection<Object> values = data.values();
             //生成sql语句
             String sql = getUpersertSql(table, keySet, values);
+            System.out.println(sql);
             //预编译sql
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             connection.commit();
+            String type = value.getString("type");
+            if ("update".equals(type)) {
+                DimUtil.deleteCached(table,data.getString("id"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

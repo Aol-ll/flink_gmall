@@ -53,6 +53,7 @@ public class DbSplitProcessFunction extends ProcessFunction<JSONObject, JSONObje
     }
 
     private void refreshMeta() {
+        System.out.println("开始获取连接");
         //查询MySQL获取配置信息
         List<TableProcess> tableProcesses = MySQLUtil.queryList("select * from table_process", TableProcess.class, true);
         //同步并检查与建表
@@ -145,7 +146,7 @@ public class DbSplitProcessFunction extends ProcessFunction<JSONObject, JSONObje
         if (tableProcess != null) {
             value.put("sink_table", tableProcess.getSinkTable());
             //按照指定字段 进行过滤
-            folterColumn(tableProcess.getSinkColumns(), value.getJSONObject("data"));
+            filterColumn(tableProcess.getSinkColumns(), value.getJSONObject("data"));
             //按照其输出类型进行分流
             if (TableProcess.SINK_TYPE_HBASE.equals(tableProcess.getSinkType())) {
                 ctx.output(outputTag, value);
@@ -157,7 +158,8 @@ public class DbSplitProcessFunction extends ProcessFunction<JSONObject, JSONObje
         }
     }
 
-    private void folterColumn(String sinkColumns, JSONObject data) {
+
+    private void filterColumn(String sinkColumns, JSONObject data) {
         String[] fileds = sinkColumns.split(",");
         List<String> list = Arrays.asList(fileds);
         Set<Map.Entry<String, Object>> entries = data.entrySet();

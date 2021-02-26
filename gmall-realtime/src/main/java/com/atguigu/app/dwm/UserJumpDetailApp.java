@@ -48,8 +48,8 @@ public class UserJumpDetailApp {
         String groupId = "userJumpDetailApp";
         String sinkTopic = "dwm_user_jump_detail";
         FlinkKafkaConsumer<String> kafkaSourse = MyKafkaUtil.getKafkaSourse(sourceTopic, groupId);
-//        DataStreamSource<String> kafkaSourseDS = env.addSource(kafkaSourse);
-        DataStream<String> kafkaSourseDS = env.socketTextStream("hadoop102", 9999);
+        DataStreamSource<String> kafkaSourseDS = env.addSource(kafkaSourse);
+//        DataStream<String> kafkaSourseDS = env.socketTextStream("hadoop102", 9999);
 
         WatermarkStrategy<JSONObject> jsonObjectWatermarkStrategy = WatermarkStrategy.<JSONObject>forMonotonousTimestamps()
                 .withTimestampAssigner(new SerializableTimestampAssigner<JSONObject>() {
