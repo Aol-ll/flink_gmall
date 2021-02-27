@@ -33,11 +33,11 @@ public class LogBaseApp {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        env.enableCheckpointing(60000L, CheckpointingMode.EXACTLY_ONCE);
+/*        env.enableCheckpointing(60000L, CheckpointingMode.EXACTLY_ONCE);
         env.setStateBackend(new FsStateBackend("hdfs://hadoop102:8020/gmall/dwd_log/ck"));
         env.getCheckpointConfig().setCheckpointTimeout(10000L);
 
-        System.setProperty("HADOOP_USER_NAME", "atguigu");
+        System.setProperty("HADOOP_USER_NAME", "atguigu");*/
         //获取kafka数据
         FlinkKafkaConsumer<String> kafkaSourse = MyKafkaUtil.getKafkaSourse("ods_base_log", "dwd_log");
         DataStreamSource<String> kafkaSourseDS = env.addSource(kafkaSourse);

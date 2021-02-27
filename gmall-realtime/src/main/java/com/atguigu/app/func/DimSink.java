@@ -48,6 +48,7 @@ public class DimSink extends RichSinkFunction<JSONObject> {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             connection.commit();
+            //判断操作类型、对update的数据对应的redis中的缓存进行删除
             String type = value.getString("type");
             if ("update".equals(type)) {
                 DimUtil.deleteCached(table,data.getString("id"));

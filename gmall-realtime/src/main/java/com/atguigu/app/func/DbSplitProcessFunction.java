@@ -137,7 +137,8 @@ public class DbSplitProcessFunction extends ProcessFunction<JSONObject, JSONObje
         String type = value.getString("type");
         //Maxwell的返回值类型为"bootstrap-insert
         if ("bootstrap-insert".equals(type)) {
-            value.put("type", "insert");
+            type = "insert";
+            value.put("type", type);
         }
         String key = table + ":" + type;
 
