@@ -56,9 +56,9 @@ public class LogBaseApp {
         startDS.addSink(MyKafkaUtil.getKafkaSink("dwd_start_log"));
         displayDS.addSink(MyKafkaUtil.getKafkaSink("dwd_display_log"));
 
-/*        pageDS.print("page------");
+        pageDS.print("page------");
         startDS.print("start---------");
-        displayDS.print("display---------");*/
+        displayDS.print("display---------");
         //结束环境
         env.execute();
     }

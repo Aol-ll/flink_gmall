@@ -62,6 +62,8 @@ public class DauApp {
         //写到kafka
         FlinkKafkaProducer<String> kafkaSink = MyKafkaUtil.getKafkaSink(sinkTopic);
         filter.map(JSON::toString).addSink(kafkaSink);
+
+        filter.map(JSON::toString).print("uv>>>");
         //执行程序
         env.execute();
     }
