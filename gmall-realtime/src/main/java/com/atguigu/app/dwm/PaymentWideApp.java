@@ -82,7 +82,7 @@ public class PaymentWideApp {
                     }
                 }).uid("payment_wide_join");
 
-//        paymentWideDS.print();
+        paymentWideDS.print();
         //写入kafka
         paymentWideDS.map(JSON::toJSONString).addSink(MyKafkaUtil.getKafkaSink(paymentWideSinkTopic));
         //执行任务
