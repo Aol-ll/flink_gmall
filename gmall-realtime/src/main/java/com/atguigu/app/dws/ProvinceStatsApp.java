@@ -47,7 +47,8 @@ public class ProvinceStatsApp {
                         "split_total_amount DOUBLE," +
                         "create_time STRING," +
                         "rowtime AS TO_TIMESTAMP(create_time,'yyyy-MM-dd HH:mm:ss')," +
-                        "WATERMARK FOR  rowtime  AS rowtime )" + MyKafkaUtil.getKafkaDDL(sourceTopic, groupId));
+                        "WATERMARK FOR  rowtime  AS rowtime )" +
+                        MyKafkaUtil.getKafkaDDL(sourceTopic, groupId));
         //3.分组、开窗、聚合
         Table reduceTable = tableEnv.sqlQuery(
                 "SELECT DATE_FORMAT(TUMBLE_START(rowtime, INTERVAL '10' SECOND),'yyyy-MM-dd HH:mm:ss') as stt," +
@@ -63,7 +64,7 @@ public class ProvinceStatsApp {
                         " from ORDER_WIDE " +
                         " group by province_id,province_name,province_area_code,province_iso_code,province_3166_2_code,TUMBLE(rowtime, INTERVAL '10' SECOND)");
 
-//        reduceTable.execute().print();
+        reduceTable.execute().print();
         //4.将动态表转换为追加流
         DataStream<ProvinceStats> provinceStatsDS = tableEnv.toAppendStream(reduceTable, ProvinceStats.class);
 

@@ -51,24 +51,21 @@ public class KeyWordStatsApp {
                         MyKafkaUtil.getKafkaDDL(sourceTopic, groupId));
         //3.过滤数据,只需要搜索数据,搜索的关键词不能为空
         Table filterTable = tableEnv.sqlQuery(
-                "select " +
-                        " page['item'] fullWord," +
+                "select page['item'] fullWord," +
                         " rowtime " +
                         " from page_view " +
                         " where page['item_type'] = 'keyword' and page['item'] is not null");
 
-        //4.使用UDTF函数进行切词处理  函数注册
+        //TODO 4.使用UDTF函数进行切词处理  函数注册
         tableEnv.createTemporarySystemFunction("ik_analyze", KeyWordUDTF.class);
         Table analyzeWordTable = tableEnv.sqlQuery(
-                "select" +
-                        " word, " +
+                "select word, " +
                         " rowtime " +
                         " from " + filterTable + " ,LATERAL TABLE (ik_analyze(fullWord)) as T(word)");
 
-        //5.分组、开窗、聚合
+        //TODO 5.分组、开窗、聚合
         Table resultTable = tableEnv.sqlQuery(
-                "select " +
-                        " word, " +
+                "select  word, " +
                         " count(*) ct, " +
                         " '" + GmallConstant.KEYWORD_SEARCH + "' source ," +
                         " DATE_FORMAT(TUMBLE_START(rowtime, INTERVAL '10' SECOND),'yyyy-MM-dd HH:mm:ss') stt," +
